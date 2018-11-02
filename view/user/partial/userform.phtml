@@ -1,0 +1,42 @@
+<?php
+echo $this->form()->openTag($form);
+?>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6">
+			<h3><?php echo $this->title; ?></h3>
+			
+			<!-- Hidden Elements -->
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('SECURITY')); ?>
+				<?php echo $this->formRow($form->get('UUID')); ?>
+			</div>
+			
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('USERNAME')); ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('EMAIL')); ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('PASSWORD')); ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('CONFIRM_PASSWORD')); ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('STATUS')); ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('DATE_CREATED')); ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('DATE_MODIFIED')); ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('SUBMIT')); ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php echo $this->form()->closeTag($form); ?>

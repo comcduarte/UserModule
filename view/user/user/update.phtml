@@ -1,0 +1,9 @@
+<?php 
+$title = "Update User";
+$this->headtitle($title);
+
+$form->setAttribute('action', $this->url('user', ['controller' => 'user', 'action' => 'update', 'uuid' => $this->uuid]));
+$form->prepare();
+
+echo $this->partial('user/partial/userform.phtml', ['title' => $title, 'form' => $form, 'uuid' => $this->uuid]);
+?>
