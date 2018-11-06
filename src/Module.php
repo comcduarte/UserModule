@@ -20,8 +20,8 @@ class Module
     {
         return [
             'factories' => [
-                'model-primary-adapter' => function ($container) {
-                    return new Adapter($container->get('model-primary-adapter-config'));
+                'user-model-primary-adapter' => function ($container) {
+                    return new Adapter($container->get('user-model-primary-adapter-config'));
                 }
             ]
         ];

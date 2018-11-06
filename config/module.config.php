@@ -53,6 +53,11 @@ return [
             ],
         ],
     ],
+    'service_manager' => [
+        'aliases' => [
+            'user-model-primary-adapter-config' => 'model-primary-adapter-config',
+        ],
+    ],
     'view_manager' => [
         'template_path_stack' => [
             __DIR__ . '/../view',

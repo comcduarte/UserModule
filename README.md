@@ -12,6 +12,6 @@ Add Autoload Configuration to Composer
 - User Module requires Midnet Module
 
 Add Database configuration
-- Requires model-primary-adapter-config in local.php
+- Requires user-model-primary-adapter-config in local.php.  Use aliases if more than one module utilize the same database adapter.
 
 
