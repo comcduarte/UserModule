@@ -15,7 +15,7 @@ class UserForm extends Form
     {
         $uuid = new Uuid();
         $date = new \DateTime('now',new \DateTimeZone('EDT'));
-        $today = $date->format('Y-m-d H:m:s');
+        $today = $date->format('Y-m-d H:i:s');
         parent::__construct($uuid->value);
         
         $this->add([
