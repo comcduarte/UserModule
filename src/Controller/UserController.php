@@ -5,6 +5,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use User\Form\UserForm;
 use User\Model\UserModel;
 use User\Traits\AdapterTrait;
+use Zend\Crypt\Password\Bcrypt;
 
 class UserController extends AbstractActionController
 {
@@ -33,6 +34,9 @@ class UserController extends AbstractActionController
             
             if ($form->isValid()) {
                 $user->exchangeArray($form->getData());
+                
+                $bcrypt = new Bcrypt();
+                $user->PASSWORD = $bcrypt->create($user->PASSWORD);
                 $user->create();
                 
                 return $this->redirect()->toRoute('user');
@@ -65,6 +69,9 @@ class UserController extends AbstractActionController
             $form->setData($request->getPost());
             
             if ($form->isValid()) {
+                $bcrypt = new Bcrypt();
+                $user->PASSWORD = $bcrypt->create($user->PASSWORD);
+                                
                 $user->update();
                 return $this->redirect()->toRoute('user');
             }

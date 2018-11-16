@@ -7,6 +7,7 @@ Add dependencies to Composer
 - zendframework/zend-i18n
 - zendframework/zend-form
 - zendframework/zend-crypt
+- zendframework/zend-session
 
 Add Autoload Configuration to Composer
 - User Module requires Midnet Module
