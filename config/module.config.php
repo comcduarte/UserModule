@@ -7,6 +7,12 @@ use Zend\Router\Http\Segment;
 use Zend\Session\Storage\SessionArrayStorage;
 use Zend\Session\Validator\HttpUserAgent;
 use Zend\Session\Validator\RemoteAddr;
+use User\Controller\AuthController;
+use User\Controller\Factory\AuthControllerFactory;
+use User\Auth\AuthAdapter;
+use User\Auth\Factory\AuthAdapterFactory;
+use User\Service\Factory\AuthenticationServiceFactory;
+use Zend\Authentication\AuthenticationService;
 
 return [
     'router' => [
@@ -30,9 +36,12 @@ return [
     'controllers' => [
         'factories' => [
             UserController::class => UserControllerFactory::class,
+            AuthController::class => AuthControllerFactory::class,
+            
         ],
         'aliases' => [
             'user' => Controller\UserController::class,
+            'auth' => Controller\AuthController::class,
         ],
     ],
     'navigation' => [
@@ -52,6 +61,32 @@ return [
                         'route' => 'user',
                         'action' => 'index',
                     ],
+                    [
+                        'label' => 'Login',
+                        'route' => 'user',
+                        'controller' => 'auth',
+                        'action' => 'login',
+                    ],
+                    [
+                        'label' => 'Logout',
+                        'route' => 'user',
+                        'controller' => 'auth',
+                        'action' => 'logout',
+                    ],
+                ],
+            ],
+        ],
+        'user' => [
+            [
+                'label' => 'Welcome',
+                'route' => 'user',
+                'pages' => [
+                    [
+                        'label' => 'Logout',
+                        'route' => 'user',
+                        'controller' => 'auth',
+                        'action' => 'logout',
+                    ],
                 ],
             ],
         ],
@@ -59,6 +94,11 @@ return [
     'service_manager' => [
         'aliases' => [
             'user-model-primary-adapter-config' => 'model-primary-adapter-config',
+            AuthenticationService::class => 'auth-service',
+        ],
+        'factories' => [
+            AuthAdapter::class => AuthAdapterFactory::class,
+            'auth-service' => AuthenticationServiceFactory::class,
         ],
     ],
     'session_config' => [

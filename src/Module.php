@@ -23,6 +23,12 @@ class Module
         $application = $event->getApplication();
         $serviceManager = $application->getServiceManager();
         $sessionManager = $serviceManager->get(SessionManager::class);
+        
+        /**
+         * Set event to retrieve user's identity for every request
+         */
+        $eventManager = $application->getEventManager();
+        $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'protectPage'], -100);
     }
     
     public function getServiceConfig()
@@ -31,8 +37,26 @@ class Module
             'factories' => [
                 'user-model-primary-adapter' => function ($container) {
                     return new Adapter($container->get('user-model-primary-adapter-config'));
-                }
+                },
+           
             ]
         ];
+    }
+    
+    public function protectPage(MvcEvent $event)
+    {
+        $match = $event->getRouteMatch();
+        if (! $match) {
+            return;
+        }
+        
+        $sm = $event->getApplication()->getServiceManager();
+        $flashMessenger = $sm->get('ControllerPluginManager')->get('flashmessenger');
+        $authService = $sm->get('auth-service');
+        
+        if (! $authService->hasIdentity()) {
+            //-- Redirect to Login Page --//
+            $event->getRouteMatch()->setParam('controller', 'auth')->setParam('action', 'login');
+        }
     }
 }

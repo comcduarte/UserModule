@@ -5,6 +5,9 @@ use Midnet\Model\DatabaseObject;
 
 class UserModel extends DatabaseObject
 {
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 2;
+    
     public $UUID;
     public $USERNAME;
     public $EMAIL;
