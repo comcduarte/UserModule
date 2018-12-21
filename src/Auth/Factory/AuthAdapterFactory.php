@@ -12,7 +12,7 @@ class AuthAdapterFactory implements FactoryInterface
         $dbAdapter = $container->get('user-model-primary-adapter');
         
         $adapter = new AuthAdapter();
-        $adapter->setAdapter($dbAdapter);
+        $adapter->setDbAdapter($dbAdapter);
         
         return $adapter;
     }

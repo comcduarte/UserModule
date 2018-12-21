@@ -20,6 +20,17 @@ use User\Controller\Factory\RoleControllerFactory;
 return [
     'router' => [
         'routes' => [
+            'role' => [
+                'type' => Literal::class,
+                'priority' => 1,
+                'options' => [
+                    'route' => '/role',
+                    'defaults' => [
+                        'controller' => 'role',
+                        'action' => 'index',
+                    ],
+                ],
+            ],
             'user' => [
                 'type'    => Literal::class,
                 'priority' => 1,
@@ -77,9 +88,13 @@ return [
             'user/login' => ['login'],
             'user/logout' => ['logout'],
             // @ TODO: Logout is only allowed for guests to clear identities in case of emergency.  Remove once checks and balances operate.
+            
+            'role' => [],
         ],
         'member' => [
             'user/logout' => ['logout'],
+            'user/default' => [],
+            'role' => ['create'],
         ],
     ],
     'controllers' => [
@@ -121,18 +136,18 @@ return [
                     ],
                     [
                         'label' => 'Role Maintenace',
-                        'route' => 'user',
+                        'route' => 'role',
                         'class' => 'dropdown-submenu',
                         'pages' => [
                             [
                                 'label' => 'Create New Role',
                                 'route' => 'user/default',
-                                'controller' => 'user',
+                                'controller' => 'role',
                                 'action' => 'create',
                             ],
                             [
                                 'label' => 'List Roles',
-                                'route' => 'user',
+                                'route' => 'role',
                                 'action' => 'index',
                             ],
                         ],
