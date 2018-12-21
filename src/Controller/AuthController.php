@@ -22,7 +22,7 @@ class AuthController extends AbstractActionController
             $form->bind(new UserModel());
             $form->setData($request->getPost());
             if (!$form->isValid()) {
-                $message = self::FORM_INVALID;
+//                 $message = self::FORM_INVALID;
             } else {
                 $user = $form->getData();
                 $adapter = $this->authService->getAdapter();

@@ -38,7 +38,6 @@ class AuthAdapter implements AdapterInterface
          */
         $bcrypt = new Bcrypt();
         $passwordHash = $user->PASSWORD;
-        $newpass = $bcrypt->create($this->password);
         
         if ($bcrypt->verify($this->password, $passwordHash)) {
             return new Result(Result::SUCCESS, $user->USERNAME, ['Authenticated Successfully']);
