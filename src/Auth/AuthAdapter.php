@@ -1,15 +1,15 @@
 <?php 
 namespace User\Auth;
 
-use Zend\Authentication\Adapter\AdapterInterface;
 use User\Model\UserModel;
 use Zend\Authentication\Result;
+use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Crypt\Password\Bcrypt;
-use Midnet\Traits\AdapterTrait;
+use Zend\Db\Adapter\AdapterAwareTrait;
 
 class AuthAdapter implements AdapterInterface
 {
-    use AdapterTrait;
+    use AdapterAwareTrait;
     
     private $username;
     private $password;

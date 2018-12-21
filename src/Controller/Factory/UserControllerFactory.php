@@ -10,7 +10,7 @@ class UserControllerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $controller = new UserController();
-        $controller->setAdapter($container->get('user-model-primary-adapter'));
+        $controller->setDbAdapter($container->get('user-model-primary-adapter'));
         return $controller;
     }
 }

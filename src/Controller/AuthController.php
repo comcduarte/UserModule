@@ -1,15 +1,15 @@
 <?php 
 namespace User\Controller;
 
-use Midnet\Traits\AdapterTrait;
+use User\Form\UserForm;
+use User\Model\UserModel;
+use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use User\Model\UserModel;
-use User\Form\UserForm;
 
 class AuthController extends AbstractActionController
 {
-    use AdapterTrait;
+    use AdapterAwareTrait;
     
     private $authService;
     

@@ -1,15 +1,15 @@
 <?php 
 namespace User\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use User\Form\UserForm;
 use User\Model\UserModel;
-use User\Traits\AdapterTrait;
 use Zend\Crypt\Password\Bcrypt;
+use Zend\Db\Adapter\AdapterAwareTrait;
+use Zend\Mvc\Controller\AbstractActionController;
 
 class UserController extends AbstractActionController
 {
-    use AdapterTrait;
+    use AdapterAwareTrait;
     
     public function indexAction()
     {
