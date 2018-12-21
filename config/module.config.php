@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace User;
 
 use User\Controller\UserController;
@@ -13,35 +13,85 @@ use User\Auth\AuthAdapter;
 use User\Auth\Factory\AuthAdapterFactory;
 use User\Service\Factory\AuthenticationServiceFactory;
 use Zend\Authentication\AuthenticationService;
+use Zend\Router\Http\Literal;
+use User\Controller\RoleController;
+use User\Controller\Factory\RoleControllerFactory;
 
 return [
     'router' => [
         'routes' => [
             'user' => [
-                'type'    => Segment::class,
+                'type'    => Literal::class,
+                'priority' => 1,
                 'options' => [
-                    'route'    => '/user[/:controller[/:action[/:uuid]]]',
+                    'route'    => '/user',
                     'defaults' => [
                         'controller' => 'user',
                         'action'     => 'index',
                     ],
-                    'constraints' => [
-                        'controller' => '[a-zA-Z0-9_-]*',
-                        'action' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'login' => [
+                        'type' => Literal::class,
+                        'priority' => 10,
+                        'options' => [
+                            'route' => '/login',
+                            'defaults' => [
+                                'controller' => 'auth',
+                                'action' => 'login',
+                            ],
+                        ],
+                    ],
+                    'logout' => [
+                        'type' => Literal::class,
+                        'priority' => 10,
+                        'options' => [
+                            'route' => '/logout',
+                            'defaults' => [
+                                'controller' => 'auth',
+                                'action' => 'logout',
+                            ],
+                        ],
+                    ],
+                    'default' => [
+                        'type' => Segment::class,
+                        'priority' => 0,
+                        'options' => [
+                            'route' => '/[:controller[/:action[/:uuid]]]',
+                            'defaults' => [
+                                'action' => 'index',
+                            ],
+                            'constraints' => [
+                                'controller'    =>  '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'        =>  '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ],
+                        ],
                     ],
                 ],
             ],
+        ],
+    ],
+    'acl' => [
+        'guest' => [
+            'user/login' => ['login'],
+            'user/logout' => ['logout'],
+            // @ TODO: Logout is only allowed for guests to clear identities in case of emergency.  Remove once checks and balances operate.
+        ],
+        'member' => [
+            'user/logout' => ['logout'],
         ],
     ],
     'controllers' => [
         'factories' => [
             UserController::class => UserControllerFactory::class,
             AuthController::class => AuthControllerFactory::class,
-            
+            RoleController::class => RoleControllerFactory::class,
         ],
         'aliases' => [
             'user' => Controller\UserController::class,
             'auth' => Controller\AuthController::class,
+            'role' => Controller\RoleController::class,
         ],
     ],
     'navigation' => [
@@ -49,27 +99,53 @@ return [
             [
                 'label' => 'User',
                 'route' => 'user',
+                'class' => 'dropdown',
                 'pages' => [
                     [
-                        'label' => 'Create New User',
+                        'label' => 'User Maintenance',
                         'route' => 'user',
-                        'controller' => 'user',
-                        'action' => 'create',
+                        'class' => 'dropdown-submenu',
+                        'pages' => [
+                            [
+                                'label' => 'Create New User',
+                                'route' => 'user/default',
+                                'controller' => 'user',
+                                'action' => 'create',
+                            ],
+                            [
+                                'label' => 'List Users',
+                                'route' => 'user',
+                                'action' => 'index',
+                            ],
+                        ],
                     ],
                     [
-                        'label' => 'List Users',
+                        'label' => 'Role Maintenace',
                         'route' => 'user',
-                        'action' => 'index',
+                        'class' => 'dropdown-submenu',
+                        'pages' => [
+                            [
+                                'label' => 'Create New Role',
+                                'route' => 'user/default',
+                                'controller' => 'user',
+                                'action' => 'create',
+                            ],
+                            [
+                                'label' => 'List Roles',
+                                'route' => 'user',
+                                'action' => 'index',
+                            ],
+                        ],
                     ],
-                    [
+                    [                    
                         'label' => 'Login',
-                        'route' => 'user',
+                        'route' => 'user/login',
                         'controller' => 'auth',
                         'action' => 'login',
                     ],
                     [
                         'label' => 'Logout',
-                        'route' => 'user',
+                        'route' => 'user/logout',
                         'controller' => 'auth',
                         'action' => 'logout',
                     ],
@@ -83,7 +159,7 @@ return [
                 'pages' => [
                     [
                         'label' => 'Logout',
-                        'route' => 'user',
+                        'route' => 'user/logout',
                         'controller' => 'auth',
                         'action' => 'logout',
                     ],
@@ -102,8 +178,8 @@ return [
         ],
     ],
     'session_config' => [
-        'cookie_lifetime' => 60*60*1,
-        'gc_maxlifetime'     => 60*60*24*30,
+        'cookie_lifetime' => 3600,
+        'gc_maxlifetime'     => 2592000,
     ],
     'session_manager' => [
         'validators' => [
