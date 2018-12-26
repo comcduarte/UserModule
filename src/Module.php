@@ -8,7 +8,6 @@ namespace User;
 
 use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\MvcEvent;
-use Zend\Session\SessionManager;
 
 class Module
 {
@@ -20,15 +19,15 @@ class Module
 
     public function onBootStrap(MvcEvent $event) 
     {
-        $application = $event->getApplication();
-        $serviceManager = $application->getServiceManager();
-        $sessionManager = $serviceManager->get(SessionManager::class);
+//         $application = $event->getApplication();
+//         $serviceManager = $application->getServiceManager();
+//         $sessionManager = $serviceManager->get(SessionManager::class);
         
         /**
          * Set event to retrieve user's identity for every request
          */
-        $eventManager = $application->getEventManager();
-        $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'protectPage'], -100);
+//         $eventManager = $application->getEventManager();
+//         $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'protectPage'], -100);
     }
     
     public function getServiceConfig()
@@ -51,7 +50,7 @@ class Module
         }
         
         $sm = $event->getApplication()->getServiceManager();
-        $flashMessenger = $sm->get('ControllerPluginManager')->get('flashmessenger');
+//         $flashMessenger = $sm->get('ControllerPluginManager')->get('flashmessenger');
         $authService = $sm->get('auth-service');
         
         if (! $authService->hasIdentity()) {

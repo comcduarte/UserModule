@@ -2,7 +2,7 @@
 $title = "Login";
 $this->headtitle($title);
 
-$form->setAttribute('action', $this->url('user', ['controller' => 'auth', 'action' => 'login']));
+$form->setAttribute('action', $this->url('user/login'));
 $form->prepare();
 
 echo $this->form()->openTag($form);

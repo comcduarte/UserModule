@@ -14,7 +14,7 @@ class AclFactory implements FactoryInterface
         /**
          * Resources
          */
-        $user = $acl->addResource('User');
+//         $user = $acl->addResource('User');
         $streetlamps = $acl->addResource('StreetLamps');
         
         /**
@@ -25,7 +25,7 @@ class AclFactory implements FactoryInterface
         /**
          * Authenticated Role
          */
-        $employee = $acl->addRole('employee','guest');
+        $employee = $acl->addRole('employee',$guest);
         $acl->allow($employee, $streetlamps);
         
         /**

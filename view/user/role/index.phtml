@@ -1,1 +1,26 @@
-Module: User &raquo; Controller: Role &raquo; Action: Index
+<div class="container">
+	<!-- Add News: WYSIWYG Edior -->
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Role Name</th>
+				<th>Status</th>
+				<th>Created</th>
+				<th>Modified</th>
+				<th />
+			</tr>
+		</thead>
+		<tbody>
+		<?php foreach ($roles as $role) : ?>
+			<tr>
+				<td><a href=<?php echo $this->url('user/default', ['controller' => 'role','action' => 'update','uuid' => $role['UUID']]); ?>><?=$role['ROLENAME']?></a></td>
+				<td><?=$role['STATUS']?></td>
+				<td><?=$role['DATE_CREATED']?></td>
+				<td><?=$role['DATE_MODIFIED']?></td>
+				<td><a class="btn btn-danger" href=<?php echo $this->url('user/default', ['controller' => 'role','action' => 'delete','uuid' => $user['UUID']]); ?>>Delete</a></td>
+			</tr>
+		<?php endforeach; ?>
+		</tbody>
+	</table>
+	<!-- / Add News: WYSIWYG Edior -->
+</div>

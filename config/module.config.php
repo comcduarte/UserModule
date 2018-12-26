@@ -88,13 +88,10 @@ return [
             'user/login' => ['login'],
             'user/logout' => ['logout'],
             // @ TODO: Logout is only allowed for guests to clear identities in case of emergency.  Remove once checks and balances operate.
-            
-            'role' => [],
         ],
         'member' => [
             'user/logout' => ['logout'],
-            'user/default' => [],
-            'role' => ['create'],
+            'user/default' => ['index', 'create'],
         ],
     ],
     'controllers' => [
@@ -129,7 +126,8 @@ return [
                             ],
                             [
                                 'label' => 'List Users',
-                                'route' => 'user',
+                                'route' => 'user/default',
+                                'controller' => 'user',
                                 'action' => 'index',
                             ],
                         ],
@@ -147,7 +145,8 @@ return [
                             ],
                             [
                                 'label' => 'List Roles',
-                                'route' => 'role',
+                                'route' => 'user/default',
+                                'controller' => 'role',
                                 'action' => 'index',
                             ],
                         ],
