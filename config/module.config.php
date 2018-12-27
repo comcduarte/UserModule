@@ -91,7 +91,8 @@ return [
         ],
         'member' => [
             'user/logout' => ['logout'],
-            'user/default' => ['index', 'create'],
+            'user/default' => ['index', 'create', 'update', 'delete'],
+            'user' => ['index'],
         ],
     ],
     'controllers' => [

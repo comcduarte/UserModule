@@ -2,7 +2,7 @@
 $title = "Create New User";
 $this->headtitle($title);
 
-$form->setAttribute('action', $this->url('user', ['controller' => 'user', 'action' => 'create']));
+$form->setAttribute('action', $this->url('user/default', ['controller' => 'user', 'action' => 'create']));
 $form->prepare();
 
 echo $this->partial('user/partial/userform.phtml', ['title' => $title, 'form' => $form]);

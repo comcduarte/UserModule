@@ -39,7 +39,7 @@ class UserController extends AbstractActionController
                 $user->PASSWORD = $bcrypt->create($user->PASSWORD);
                 $user->create();
                 
-                return $this->redirect()->toRoute('user');
+                return $this->redirect()->toRoute('user/default');
             }
         }
         
@@ -68,11 +68,8 @@ class UserController extends AbstractActionController
             $form->setData($request->getPost());
             
             if ($form->isValid()) {
-                $bcrypt = new Bcrypt();
-                $user->PASSWORD = $bcrypt->create($user->PASSWORD);
-                                
                 $user->update();
-                return $this->redirect()->toRoute('user');
+                return $this->redirect()->toRoute('user/default');
             }
             
         }
@@ -87,7 +84,7 @@ class UserController extends AbstractActionController
     {
         $uuid = $this->params()->fromRoute('uuid', 0);
         if (!$uuid) {
-            return $this->redirect()->toRoute('user');
+            return $this->redirect()->toRoute('user/default');
         }
         
         $user = new UserModel($this->adapter);
