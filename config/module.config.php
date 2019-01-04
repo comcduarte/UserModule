@@ -16,6 +16,8 @@ use Zend\Authentication\AuthenticationService;
 use Zend\Router\Http\Literal;
 use User\Controller\RoleController;
 use User\Controller\Factory\RoleControllerFactory;
+use User\Form\UserRolesForm;
+use User\Form\Factory\UserRolesFormFactory;
 
 return [
     'router' => [
@@ -91,7 +93,7 @@ return [
         ],
         'member' => [
             'user/logout' => ['logout'],
-            'user/default' => ['index', 'create', 'update', 'delete'],
+            'user/default' => ['index', 'create', 'update', 'delete', 'assign', 'unassign'],
             'user' => ['index'],
         ],
     ],
@@ -180,6 +182,10 @@ return [
                     ],
                 ],
             ],
+        ],
+    ],
+    'form_elements' => [
+        'factories' => [
         ],
     ],
     'service_manager' => [

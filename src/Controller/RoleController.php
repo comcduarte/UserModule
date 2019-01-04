@@ -1,10 +1,10 @@
 <?php 
 namespace User\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Db\Adapter\AdapterAwareTrait;
-use User\Model\RoleModel;
 use User\Form\RoleForm;
+use User\Model\RoleModel;
+use Zend\Db\Adapter\AdapterAwareTrait;
+use Zend\Mvc\Controller\AbstractActionController;
 
 class RoleController extends AbstractActionController
 {
@@ -88,5 +88,4 @@ class RoleController extends AbstractActionController
         
         return $this->redirect()->toRoute('role');
     }
-    
 }
