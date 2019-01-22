@@ -11,6 +11,7 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
 use RuntimeException;
 use User\Model\RoleModel;
+use Midnet\Model\Uuid;
 
 class UserController extends AbstractActionController
 {
@@ -39,6 +40,15 @@ class UserController extends AbstractActionController
             
             if ($form->isValid()) {
                 $user->exchangeArray($form->getData());
+                
+                $uuid = new Uuid();
+                $user->UUID = $uuid->value;
+                
+                $date = new \DateTime('now',new \DateTimeZone('EDT'));
+                $today = $date->format('Y-m-d H:i:s');
+                $user->DATE_CREATED = $today;
+                
+                $user->STATUS = $user::INACTIVE_STATUS;
                 
                 $bcrypt = new Bcrypt();
                 $user->PASSWORD = $bcrypt->create($user->PASSWORD);

@@ -9,11 +9,16 @@ use RuntimeException;
 
 class UserModel extends DatabaseObject
 {
-    const STATUS_ACTIVE = 1;
-    const STATUS_INACTIVE = 2;
-    
     public $UUID;
     public $USERNAME;
+    public $FNAME;
+    public $LNAME;
+    public $ADDR1;
+    public $ADDR2;
+    public $CITY;
+    public $STATE;
+    public $ZIP;
+    public $PHONE;
     public $EMAIL;
     public $PASSWORD;
     public $STATUS;
