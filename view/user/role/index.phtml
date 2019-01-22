@@ -13,7 +13,7 @@
 		<tbody>
 		<?php foreach ($roles as $role) : ?>
 			<tr>
-				<td><a href=<?php echo $this->url('user/default', ['controller' => 'role','action' => 'update','uuid' => $role['UUID']]); ?>><?=$role['ROLENAME']?></a></td>
+				<td><a href=<?php echo $this->url('role/default', ['action' => 'update','uuid' => $role['UUID']]); ?>><?=$role['ROLENAME']?></a></td>
 				<td><?=$role['STATUS']?></td>
 				<td><?=$role['DATE_CREATED']?></td>
 				<td><?=$role['DATE_MODIFIED']?></td>

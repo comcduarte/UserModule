@@ -32,6 +32,19 @@ return [
                         'action' => 'index',
                     ],
                 ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'default' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/[:action[/:uuid]]',
+                            'defaults' => [
+                                'controller' => RoleController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'user' => [
                 'type'    => Literal::class,
@@ -95,6 +108,7 @@ return [
             'user/logout' => ['logout'],
             'user/default' => ['index', 'create', 'update', 'delete', 'assign', 'unassign'],
             'user' => ['index'],
+            'role/default' => ['index', 'create', 'update', 'delete'],
         ],
     ],
     'controllers' => [

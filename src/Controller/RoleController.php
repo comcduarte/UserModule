@@ -35,7 +35,7 @@ class RoleController extends AbstractActionController
                 $model->exchangeArray($form->getData());
                 $model->create();
                 
-                return $this->redirect()->toRoute('role');
+                return $this->redirect()->toRoute('role/default');
             }
         }
         
@@ -65,7 +65,7 @@ class RoleController extends AbstractActionController
             
             if ($form->isValid()) {
                 $model->update();
-                return $this->redirect()->toRoute('role');
+                return $this->redirect()->toRoute('role/default');
             }
         }
         

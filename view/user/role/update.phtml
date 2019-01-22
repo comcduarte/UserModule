@@ -2,7 +2,7 @@
 $title = "Update Role";
 $this->headtitle($title);
 
-$form->setAttribute('action', $this->url('user/default', ['controller' => 'role', 'action' => 'update', 'uuid' => $this->uuid]));
+$form->setAttribute('action', $this->url('role/default', ['controller' => 'role', 'action' => 'update', 'uuid' => $this->uuid]));
 $form->prepare();
 
 echo $this->partial('user/partial/roleform.phtml', ['title' => $title, 'form' => $form, 'uuid' => $this->uuid, 'update' => TRUE]);
