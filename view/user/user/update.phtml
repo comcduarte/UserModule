@@ -6,4 +6,6 @@ $form->setAttribute('action', $this->url('user/default', ['controller' => 'user'
 $form->prepare();
 
 echo $this->partial('user/partial/userform.phtml', ['title' => $title, 'form' => $form, 'uuid' => $this->uuid, 'update' => TRUE]);
+
+echo $this->annotations()->setAnnotations($annotations)->render();
 ?>

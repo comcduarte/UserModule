@@ -12,6 +12,9 @@ use Zend\Db\Sql\Select;
 use RuntimeException;
 use User\Model\RoleModel;
 use Midnet\Model\Uuid;
+use Annotation\Model\AnnotationModel;
+use Zend\Db\Sql\Where;
+use Zend\Db\Sql\Predicate\Like;
 
 class UserController extends AbstractActionController
 {
@@ -89,9 +92,35 @@ class UserController extends AbstractActionController
             
         }
         
+        //-- BEGIN: Retrieve Annotations --//
+        $annotation = new AnnotationModel($this->adapter);
+        //$where = new Where(['TABLENAME' => 'dogs','PRIKEY' => $uuid]);
+        $where = new Where([
+            new Like('TABLENAME', 'users'),
+            new Like('PRIKEY', $uuid),
+        ]);
+        $annotations = $annotation->fetchAll($where, ['DATE_CREATED DESC']);
+        
+        $notes = [];
+        foreach ($annotations as $annotation) {
+            $user = new UserModel($this->adapter);
+            $user->read(['UUID' => $annotation['USER']]);
+            
+            $notes[] = [
+                'USER' => $user->USERNAME,
+                'ANNOTATION' => $annotation['ANNOTATION'],
+                'DATE_CREATED' => $annotation['DATE_CREATED'],
+            ];
+        }
+        //-- END: Retrieve Annotations --//
+        
         return [
             'uuid' => $uuid,
             'form' => $form,
+            'annotations' => $notes,
+            'annotations_prikey' => $uuid,
+            'annotations_tablename' => 'users',
+            'annotations_user' => '',
         ];
     }
     
