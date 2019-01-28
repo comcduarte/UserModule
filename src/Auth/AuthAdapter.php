@@ -29,7 +29,7 @@ class AuthAdapter implements AdapterInterface
         /**
          * Return error if user has be deactivated
          */
-        if ($user->STATUS == UserModel::STATUS_INACTIVE) {
+        if ($user->STATUS == UserModel::INACTIVE_STATUS) {
             return new Result(Result::FAILURE, null, ['User is inactive']);
         }
         
