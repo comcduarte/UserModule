@@ -143,7 +143,6 @@ class UserForm extends Form
             'attributes' => [
                 'class' => 'form-control',
                 'id' => 'EMAIL',
-                'required' => 'true',
                 'placeholder' => '',
             ],
             'options' => [
