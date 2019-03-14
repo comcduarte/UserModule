@@ -19,6 +19,9 @@ class AuthController extends AbstractActionController
         $form = new UserForm();
         
         if ($request->isPost()) {
+            /**
+             * @ TODO: $form->bind(new UserModel()); Breaks when upgrading from zend-form 2.12.0 to 2.14.0
+             */
             $form->bind(new UserModel());
             $form->setData($request->getPost());
             if (!$form->isValid()) {
