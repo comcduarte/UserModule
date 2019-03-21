@@ -51,7 +51,7 @@ class UserController extends AbstractActionController
                 $today = $date->format('Y-m-d H:i:s');
                 $user->DATE_CREATED = $today;
                 
-                $user->STATUS = $user::INACTIVE_STATUS;
+                $user->STATUS = $user::ACTIVE_STATUS;
                 
                 $bcrypt = new Bcrypt();
                 $user->PASSWORD = $bcrypt->create($user->PASSWORD);
