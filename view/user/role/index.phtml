@@ -17,7 +17,7 @@
 				<td><?=$role['STATUS']?></td>
 				<td><?=$role['DATE_CREATED']?></td>
 				<td><?=$role['DATE_MODIFIED']?></td>
-				<td><a class="btn btn-danger" href=<?php echo $this->url('user/default', ['controller' => 'role','action' => 'delete','uuid' => $role['UUID']]); ?>>Delete</a></td>
+				<td><a class="btn btn-danger" href=<?php echo $this->url('user/default', ['controller' => 'role','action' => 'delete','uuid' => $role['UUID']]); ?>><i class="fas fa-trash-alt"></i></a></td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>
