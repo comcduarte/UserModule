@@ -1,0 +1,51 @@
+<?php 
+use User\Model\RoleModel;
+
+$title = "Assign User Roles";
+$this->headtitle($title);
+
+$form->setAttribute('action', $this->url('user/default', ['controller' => 'user', 'action' => 'assign']));
+$form->prepare();
+?>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6">
+			<h3><?php echo $this->title; ?></h3>
+
+			<!-- Hidden Elements -->
+			<?php echo $this->form()->openTag($form); ?>
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('SECURITY')); ?>
+				<?php echo $this->formRow($form->get('UUID')); ?>
+				<?php echo $this->formRow($form->get('USER')); ?>
+			</div>
+			<div class="form-group">
+				<h1><?= $this->username; ?></h1>
+			</div>
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('ROLE')); ?>
+			</div>
+			<div class="form-group">
+				<?php echo $this->formRow($form->get('SUBMIT')); ?>
+			</div>
+			<?php echo $this->form()->closeTag($form); ?>
+		</div>
+		<div class="col-sm-6">
+			<table class="table table-striped">
+				<thead>
+					<tr><th>Assigned Roles</th></tr>
+				</thead>
+				<tbody>
+					<?php foreach ($this->roles as $role) : ?>
+					<tr>
+						<td>
+							<div class="float-left"><?php echo $role['ROLENAME']; ?></div>
+							<div class="float-right"><a class="pull-right" href="<?=$this->url('user/default', ['controller' => 'user', 'action' => 'unassign', 'uuid' => $role['UUID']])?>">X</a></div>
+						</td>
+					</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

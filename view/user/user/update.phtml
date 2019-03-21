@@ -2,8 +2,10 @@
 $title = "Update User";
 $this->headtitle($title);
 
-$form->setAttribute('action', $this->url('user', ['controller' => 'user', 'action' => 'update', 'uuid' => $this->uuid]));
+$form->setAttribute('action', $this->url('user/default', ['controller' => 'user', 'action' => 'update', 'uuid' => $this->uuid]));
 $form->prepare();
 
-echo $this->partial('user/partial/userform.phtml', ['title' => $title, 'form' => $form, 'uuid' => $this->uuid]);
+echo $this->partial('user/partial/userform.phtml', ['title' => $title, 'form' => $form, 'uuid' => $this->uuid, 'update' => TRUE]);
+
+echo $this->annotations()->setAnnotations($annotations)->render();
 ?>

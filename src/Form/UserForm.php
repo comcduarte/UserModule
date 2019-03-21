@@ -1,10 +1,8 @@
 <?php 
 namespace User\Form;
 
-use Midnet\Model\Uuid;
 use Zend\Form\Form;
 use Zend\Form\Element\Csrf;
-use Zend\Form\Element\Hidden;
 use Zend\Form\Element\Password;
 use Zend\Form\Element\Submit;
 use Zend\Form\Element\Text;
@@ -13,19 +11,7 @@ class UserForm extends Form
 {
     public function __construct($name = null)
     {
-        $uuid = new Uuid();
-        $date = new \DateTime('now',new \DateTimeZone('EDT'));
-        $today = $date->format('Y-m-d H:m:s');
-        parent::__construct($uuid->value);
-        
-        $this->add([
-            'name' => 'UUID',
-            'type' => Hidden::class,
-            'attributes' => [
-                'value' => $uuid->value,
-                'id' => 'UUID',
-            ],
-        ]);
+        parent::__construct($name);
         
         $this->add([
             'name' => 'USERNAME',
@@ -42,12 +28,121 @@ class UserForm extends Form
         ]);
         
         $this->add([
+            'name' => 'FNAME',
+            'type' => Text::class,
+            'attributes' => [
+                'class' => 'form-control',
+                'id' => 'FNAME',
+                'required' => 'true',
+                'placeholder' => '',
+            ],
+            'options' => [
+                'label' => 'First Name',
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'LNAME',
+            'type' => Text::class,
+            'attributes' => [
+                'class' => 'form-control',
+                'id' => 'LNAME',
+                'required' => 'true',
+                'placeholder' => '',
+            ],
+            'options' => [
+                'label' => 'Last Name',
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'ADDR1',
+            'type' => Text::class,
+            'attributes' => [
+                'class' => 'form-control',
+                'id' => 'ADDR1',
+                'required' => 'true',
+                'placeholder' => '',
+            ],
+            'options' => [
+                'label' => 'Address',
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'ADDR2',
+            'type' => Text::class,
+            'attributes' => [
+                'class' => 'form-control',
+                'id' => 'ADDR2',
+                'placeholder' => '',
+            ],
+            'options' => [
+                'label' => 'Address 2',
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'CITY',
+            'type' => Text::class,
+            'attributes' => [
+                'class' => 'form-control',
+                'id' => 'CITY',
+                'required' => 'true',
+                'placeholder' => '',
+            ],
+            'options' => [
+                'label' => 'City',
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'STATE',
+            'type' => Text::class,
+            'attributes' => [
+                'class' => 'form-control',
+                'id' => 'STATE',
+                'required' => 'true',
+                'placeholder' => '',
+            ],
+            'options' => [
+                'label' => 'State',
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'ZIP',
+            'type' => Text::class,
+            'attributes' => [
+                'class' => 'form-control',
+                'id' => 'ZIP',
+                'required' => 'true',
+                'placeholder' => '',
+            ],
+            'options' => [
+                'label' => 'Zip Code',
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'PHONE',
+            'type' => Text::class,
+            'attributes' => [
+                'class' => 'form-control',
+                'id' => 'PHONE',
+                'placeholder' => '',
+            ],
+            'options' => [
+                'label' => 'Phone',
+            ],
+        ]);
+        
+        $this->add([
             'name' => 'EMAIL',
             'type' => Text::class,
             'attributes' => [
                 'class' => 'form-control',
                 'id' => 'EMAIL',
-                'required' => 'true',
                 'placeholder' => '',
             ],
             'options' => [
@@ -94,36 +189,6 @@ class UserForm extends Form
             ],
             'options' => [
                 'label' => 'Status',
-            ],
-        ]);
-        
-        $this->add([
-            'name' => 'DATE_CREATED',
-            'type' => Text::class,
-            'attributes' => [
-                'class' => 'form-control',
-                'id' => 'DATE_CREATED',
-                'required' => 'true',
-                'placeholder' => '',
-                'value' => $today,
-            ],
-            'options' => [
-                'label' => 'Date Created',
-            ],
-        ]);
-        
-        $this->add([
-            'name' => 'DATE_MODIFIED',
-            'type' => Text::class,
-            'attributes' => [
-                'class' => 'form-control',
-                'id' => 'DATE_MODIFIED',
-                'required' => 'true',
-                'placeholder' => '',
-                'value' => $today,
-            ],
-            'options' => [
-                'label' => 'Date Modified',
             ],
         ]);
         

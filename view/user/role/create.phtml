@@ -1,0 +1,9 @@
+<?php 
+$title = "Create New Role";
+$this->headtitle($title);
+
+$form->setAttribute('action', $this->url('role/default', ['controller' => 'role', 'action' => 'create']));
+$form->prepare();
+
+echo $this->partial('user/partial/roleform.phtml', ['title' => $title, 'form' => $form]);
+?>
