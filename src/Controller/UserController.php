@@ -87,6 +87,7 @@ class UserController extends AbstractActionController
             
             if ($form->isValid()) {
                 $user->update();
+                $this->flashmessenger()->addSuccessMessage('Update Successful');
                 return $this->redirect()->toRoute('user/default');
             }
             
