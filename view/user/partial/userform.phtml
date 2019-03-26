@@ -53,6 +53,10 @@
 	<div class="form-group">
 		<?php echo $this->formRow($form->get('CONFIRM_PASSWORD')); ?>
 	</div>
+	<?php else : ?>
+	<div class="form-group">
+    	<?php echo $this->formRow($form->get('STATUS')); ?>
+    </div>
 	<?php endif; ?>
 	<div class="form-group">
 		<?php echo $this->formRow($form->get('SUBMIT')); ?>
