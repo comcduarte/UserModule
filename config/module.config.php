@@ -1,23 +1,21 @@
 <?php
 namespace User;
 
+use User\Auth\AuthAdapter;
+use User\Auth\Factory\AuthAdapterFactory;
+use User\Controller\AuthController;
+use User\Controller\RoleController;
 use User\Controller\UserController;
+use User\Controller\Factory\AuthControllerFactory;
+use User\Controller\Factory\RoleControllerFactory;
 use User\Controller\Factory\UserControllerFactory;
+use User\Service\Factory\AuthenticationServiceFactory;
+use Zend\Authentication\AuthenticationService;
+use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\Session\Storage\SessionArrayStorage;
 use Zend\Session\Validator\HttpUserAgent;
 use Zend\Session\Validator\RemoteAddr;
-use User\Controller\AuthController;
-use User\Controller\Factory\AuthControllerFactory;
-use User\Auth\AuthAdapter;
-use User\Auth\Factory\AuthAdapterFactory;
-use User\Service\Factory\AuthenticationServiceFactory;
-use Zend\Authentication\AuthenticationService;
-use Zend\Router\Http\Literal;
-use User\Controller\RoleController;
-use User\Controller\Factory\RoleControllerFactory;
-use User\Form\UserRolesForm;
-use User\Form\Factory\UserRolesFormFactory;
 
 return [
     'router' => [
