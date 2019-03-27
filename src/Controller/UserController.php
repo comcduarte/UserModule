@@ -57,7 +57,7 @@ class UserController extends AbstractActionController
                 $user->PASSWORD = $bcrypt->create($user->PASSWORD);
                 $user->create();
                 
-                return $this->redirect()->toRoute('user/default');
+                return $this->redirect()->toRoute('user/default', ['controller' => 'user', 'action' => 'update', 'uuid' => $user->UUID]);
             }
         }
         
