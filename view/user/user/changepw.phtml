@@ -1,0 +1,33 @@
+<?php 
+$title = "Change Password";
+$this->headtitle($title);
+$form = $this->user_change_password_form;
+
+$form->setAttribute('action', $this->url('user/default', ['controller' => 'user', 'action' => 'changepw', 'uuid' => $this->uuid]));
+$form->prepare();
+?>
+
+<div class="card mb-4">
+	<?php echo $this->form()->openTag($form); ?>
+	<div class="card-header d-flex justify-content-between">
+		<div>
+			<b><?php echo $title; ?></b>
+		</div>
+		<div>
+			<?php echo $this->formRow($form->get('SUBMIT')); ?>
+		</div>
+	</div>
+	
+	<div class="card-body">
+		<div class="form-group">
+    		<?php echo $this->formRow($form->get('SECURITY')); ?>
+    	</div>
+    	<div class="form-group">
+    		<?php echo $this->formRow($form->get('PASSWORD')); ?>
+    	</div>
+    	<div class="form-group">
+    		<?php echo $this->formRow($form->get('CONFIRM_PASSWORD')); ?>
+    	</div>
+	</div>
+	<?php echo $this->form()->closeTag($form); ?>
+</div>

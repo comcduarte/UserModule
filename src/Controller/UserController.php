@@ -15,6 +15,7 @@ use Midnet\Model\Uuid;
 use Annotation\Model\AnnotationModel;
 use Zend\Db\Sql\Where;
 use Zend\Db\Sql\Predicate\Like;
+use User\Form\UserChangePasswordForm;
 
 class UserController extends AbstractActionController
 {
@@ -54,6 +55,7 @@ class UserController extends AbstractActionController
                 $user->STATUS = $user::ACTIVE_STATUS;
                 
                 $bcrypt = new Bcrypt();
+                
                 $user->PASSWORD = $bcrypt->create($user->PASSWORD);
                 $user->create();
                 
@@ -217,5 +219,47 @@ class UserController extends AbstractActionController
         $user->unassignRole(['UUID' => $uuid]);
         
         return $this->redirect()->toRoute('user/default');
+    }
+    
+    public function changepwAction()
+    {
+        $uuid = $this->params()->fromRoute('uuid', 0);
+        if (!$uuid) {
+            $this->flashmessenger()->addErrorMessage('Did not pass identifier.');
+            return $this->redirect()->toRoute('user/default');
+        }
+        
+        $model = new UserModel($this->adapter);
+        $model->read(['UUID' => $uuid]);
+        
+        $form = new UserChangePasswordForm();
+        $form->init();
+        $form->setInputFilter($model->getInputFilter());
+        
+        
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setInputFilter($model->getInputFilter());
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $result = $model->changePassword($data['PASSWORD']);
+                
+                if ($result) {
+                    $this->flashmessenger()->addSuccessMessage('Password Change Successful');
+                } else {
+                    $this->flashmessenger()->addErrorMessage('Unable to change password');
+                }
+                
+                return $this->redirect()->toRoute('user/default');
+            }
+            
+        }
+        
+        return ([
+            'user_change_password_form' => $form,
+            'uuid' => $uuid,
+        ]);
+        
     }
 }

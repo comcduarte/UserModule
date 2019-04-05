@@ -2,10 +2,14 @@
 namespace User\Model;
 
 use Midnet\Model\DatabaseObject;
-use Zend\Db\Sql\Insert;
+use Zend\Crypt\Password\Bcrypt;
 use Zend\Db\Sql\Delete;
+use Zend\Db\Sql\Insert;
 use Zend\Db\Sql\Sql;
+use Zend\InputFilter\InputFilter;
+use Zend\Validator\Identical;
 use RuntimeException;
+use Zend\Validator\StringLength;
 
 class UserModel extends DatabaseObject
 {
@@ -76,5 +80,50 @@ class UserModel extends DatabaseObject
             return $e;
         }
         return true;
+    }
+    
+    public function changePassword ($newPassword = null)
+    {
+        $bcrypt = new Bcrypt();
+        $this->PASSWORD = $bcrypt->create($newPassword);
+        $this->update();
+        return $this;
+    }
+    
+    public function getInputFilter()
+    {
+        if (!$this->inputFilter) {
+            $inputFilter = new InputFilter();
+            
+            $inputFilter->add([
+                'name' => 'PASSWORD',
+                'required' => true,
+                'validators' => [
+                    [
+                        'name' => StringLength::class,
+                        'options' => [
+                            'min' => 5,
+                            'max' => 64,
+                        ],
+                    ],
+                ],
+            ]);
+            
+            $inputFilter->add([
+                'name' => 'CONFIRM_PASSWORD',
+                'required' => true,
+                'validators' => [
+                    [
+                        'name' => Identical::class,
+                        'options' => [
+                            'token' => 'PASSWORD',
+                        ],
+                    ],
+                ],
+            ]);
+            
+            $this->inputFilter = $inputFilter;
+        }
+        return $this->inputFilter;
     }
 }

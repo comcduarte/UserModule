@@ -1,8 +1,7 @@
 <?php 
 namespace User\Controller;
 
-use User\Form\UserForm;
-use User\Model\UserModel;
+use User\Form\UserLoginForm;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -16,25 +15,26 @@ class AuthController extends AbstractActionController
     public function loginAction()
     {
         $request = $this->getRequest();
-        $form = new UserForm();
+        $form = new UserLoginForm();
         
         if ($request->isPost()) {
             /**
              * @ TODO: $form->bind(new UserModel()); Breaks when upgrading from zend-form 2.12.0 to 2.14.0
              */
-            $form->bind(new UserModel());
+//             $form->bind(new UserModel());
             $form->setData($request->getPost());
             if (!$form->isValid()) {
-//                 $message = self::FORM_INVALID;
+                $this->flashMessenger()->addErrorMessage('Form Invalid.');
+                $this->redirect()->toRoute('user', ['controller' => 'auth','action' => 'login']);
             } else {
-                $user = $form->getData();
+                $data = $form->getData();
                 $adapter = $this->authService->getAdapter();
-                $adapter->setUsername($user->USERNAME);
-                $adapter->setPassword($user->PASSWORD);
+                $adapter->setUsername($data['USERNAME']);
+                $adapter->setPassword($data['PASSWORD']);
                 $result = $adapter->authenticate();
                 if ($result->isValid()) {
                     $storage = $this->authService->getStorage();
-                    $storage->write($user->USERNAME);
+                    $storage->write($data['USERNAME']);
                     $this->flashMessenger()->addMessage('You have successfully logged in');
                     $this->redirect()->toRoute('home');
                 } else {

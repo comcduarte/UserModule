@@ -5,6 +5,9 @@
 			<b><?php echo $this->title; ?></b>
 		</div>
 		<div>
+		<?php if ($this->update) : ?>
+			<a class="btn btn-primary btn-rounded" href="<?php echo $this->url('user/default', ['controller' => 'user', 'action' => 'changepw', 'uuid' => $uuid]); ?>">Change Password</a>
+		<?php endif; ?>
 			<?php echo $this->formRow($form->get('SUBMIT')); ?>
 		</div>
 	</div>

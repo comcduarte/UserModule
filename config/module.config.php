@@ -16,6 +16,8 @@ use Zend\Router\Http\Segment;
 use Zend\Session\Storage\SessionArrayStorage;
 use Zend\Session\Validator\HttpUserAgent;
 use Zend\Session\Validator\RemoteAddr;
+use User\View\Helper\CurrentUser;
+use User\View\Helper\Factory\CurrentUserFactory;
 
 return [
     'router' => [
@@ -104,7 +106,7 @@ return [
         ],
         'member' => [
             'user/logout' => ['logout'],
-            'user/default' => ['index', 'create', 'update', 'delete', 'assign', 'unassign'],
+            'user/default' => ['index', 'create', 'update', 'delete', 'assign', 'unassign', 'changepw'],
             'user' => ['index'],
             'role/default' => ['index', 'create', 'update', 'delete'],
         ],
@@ -192,6 +194,12 @@ return [
                         'controller' => 'auth',
                         'action' => 'logout',
                     ],
+                    [
+                        'label' => 'Change Password',
+                        'route' => 'user/default',
+                        'controller' => 'user',
+                        'action' => 'changepw',
+                    ],
                 ],
             ],
         ],
@@ -222,6 +230,14 @@ return [
     ],
     'session_storage' => [
         'type' => SessionArrayStorage::class
+    ],
+    'view_helpers' => [
+        'factories' => [
+            CurrentUser::class => CurrentUserFactory::class,
+        ],
+        'aliases' => [
+            'currentUser' => CurrentUser::class,
+        ],
     ],
     'view_manager' => [
         'template_path_stack' => [
