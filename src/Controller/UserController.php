@@ -60,6 +60,9 @@ class UserController extends AbstractActionController
                 $user->create();
                 
                 return $this->redirect()->toRoute('user/default', ['controller' => 'user', 'action' => 'update', 'uuid' => $user->UUID]);
+            } else {
+                $this->flashmessenger()->addErrorMessage('Form is invalid.');
+                return $this->redirect()->toRoute('user/default', ['controller' => 'user', 'action' => 'create']);
             }
         }
         

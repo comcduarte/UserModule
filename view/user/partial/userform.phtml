@@ -56,11 +56,10 @@
     	<div class="form-group">
     		<?php echo $this->formRow($form->get('CONFIRM_PASSWORD')); ?>
     	</div>
-    	<?php else : ?>
+    	<?php endif; ?>
     	<div class="form-group">
         	<?php echo $this->formRow($form->get('STATUS')); ?>
         </div>
-    	<?php endif; ?>
 	</div>
 	<?php echo $this->form()->closeTag($form); ?>
 </div>

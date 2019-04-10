@@ -187,6 +187,7 @@ class UserForm extends Form
                 'id' => 'STATUS',
                 'class' => 'form-control',
                 'required' => 'true',
+                'value' => UserModel::ACTIVE_STATUS,
             ],
             'options' => [
                 'label' => 'Status',
