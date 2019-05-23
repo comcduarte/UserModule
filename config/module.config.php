@@ -5,19 +5,21 @@ use User\Auth\AuthAdapter;
 use User\Auth\Factory\AuthAdapterFactory;
 use User\Controller\AuthController;
 use User\Controller\RoleController;
+use User\Controller\UserConfigController;
 use User\Controller\UserController;
 use User\Controller\Factory\AuthControllerFactory;
 use User\Controller\Factory\RoleControllerFactory;
+use User\Controller\Factory\UserConfigControllerFactory;
 use User\Controller\Factory\UserControllerFactory;
 use User\Service\Factory\AuthenticationServiceFactory;
+use User\View\Helper\CurrentUser;
+use User\View\Helper\Factory\CurrentUserFactory;
 use Zend\Authentication\AuthenticationService;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\Session\Storage\SessionArrayStorage;
 use Zend\Session\Validator\HttpUserAgent;
 use Zend\Session\Validator\RemoteAddr;
-use User\View\Helper\CurrentUser;
-use User\View\Helper\Factory\CurrentUserFactory;
 
 return [
     'router' => [
@@ -80,6 +82,17 @@ return [
                             ],
                         ],
                     ],
+                    'config' => [
+                        'type' => Segment::class,
+                        'priority' => 10,
+                        'options' => [
+                            'route' => '/config[/:action]',
+                            'defaults' => [
+                                'controller' => UserConfigController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
                     'default' => [
                         'type' => Segment::class,
                         'priority' => 0,
@@ -116,11 +129,13 @@ return [
             UserController::class => UserControllerFactory::class,
             AuthController::class => AuthControllerFactory::class,
             RoleController::class => RoleControllerFactory::class,
+            UserConfigController::class => UserConfigControllerFactory::class,
         ],
         'aliases' => [
             'user' => Controller\UserController::class,
             'auth' => Controller\AuthController::class,
             'role' => Controller\RoleController::class,
+            'config' => UserConfigController::class,
         ],
     ],
     'navigation' => [
@@ -179,6 +194,10 @@ return [
                         'route' => 'user/logout',
                         'controller' => 'auth',
                         'action' => 'logout',
+                    ],
+                    [
+                        'label' => 'Settings',
+                        'route' => 'user/config',
                     ],
                 ],
             ],
