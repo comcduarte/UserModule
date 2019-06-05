@@ -9,7 +9,7 @@ use Zend\Form\Element\Csrf;
 use User\Model\UserModel;
 use Midnet\Model\Uuid;
 use Zend\Db\Adapter\AdapterAwareTrait;
-use RuntimeException;
+use Exception;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select as SqlSelect;
 
@@ -113,7 +113,7 @@ class UserRolesForm extends Form
         
         try {
             $resultSet = $statement->execute();
-        } catch (RuntimeException $e) {
+        } catch (Exception $e) {
             return $e;
         }
         

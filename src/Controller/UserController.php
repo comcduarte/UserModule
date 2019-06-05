@@ -9,7 +9,7 @@ use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
-use RuntimeException;
+use Exception;
 use User\Model\RoleModel;
 use Midnet\Model\Uuid;
 use Annotation\Model\AnnotationModel;
@@ -186,7 +186,7 @@ class UserController extends AbstractActionController
         
         try {
             $resultSet = $statement->execute();
-        } catch (RuntimeException $e) {
+        } catch (Exception $e) {
             return $e;
         }
         

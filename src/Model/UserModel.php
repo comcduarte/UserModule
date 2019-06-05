@@ -8,7 +8,7 @@ use Zend\Db\Sql\Insert;
 use Zend\Db\Sql\Sql;
 use Zend\InputFilter\InputFilter;
 use Zend\Validator\Identical;
-use RuntimeException;
+use Exception;
 use Zend\Validator\StringLength;
 
 class UserModel extends DatabaseObject
@@ -60,7 +60,7 @@ class UserModel extends DatabaseObject
         
         try {
             $statement->execute();
-        } catch (RuntimeException $e) {
+        } catch (Exception $e) {
             return $e;
         }
         return $this;
@@ -76,7 +76,7 @@ class UserModel extends DatabaseObject
         
         try {
             $statement->execute();
-        } catch (RuntimeException $e) {
+        } catch (Exception $e) {
             return $e;
         }
         return true;

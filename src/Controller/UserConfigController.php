@@ -6,7 +6,7 @@ use User\Model\UserModel;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
-use RuntimeException;
+use Exception;
 
 class UserConfigController extends AbstractActionController
 {
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
             
             try {
                 $statement->execute();
-            } catch (RuntimeException $e) {
+            } catch (Exception $e) {
                 $this->flashMessenger()->addErrorMessage("Database tables failed [$key].");
                 return $e;
             }
