@@ -1,6 +1,7 @@
 <?php
 namespace User\View\Helper;
 
+use Midnet\Exception\Exception;
 use User\Model\UserModel;
 use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\View\Helper\AbstractHelper;
@@ -50,7 +51,7 @@ class CurrentUser extends AbstractHelper
             if ($this->user==null) {
                 // Oops.. the identity presents in session, but there is no such user in database.
                 // We throw an exception, because this is a possible security problem. 
-                throw new \Exception('Not found user with such ID');
+                throw new Exception('Not found user with such ID');
             }
             
             // Return the User entity we found.
