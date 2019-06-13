@@ -121,6 +121,7 @@ return [
             'user/logout' => ['logout'],
             'user/default' => ['index', 'create', 'update', 'delete', 'assign', 'unassign', 'changepw'],
             'user' => ['index'],
+            'user/config' => ['index', 'create', 'clear'],
             'role/default' => ['index', 'create', 'update', 'delete'],
         ],
     ],
