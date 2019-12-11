@@ -20,6 +20,7 @@ use Zend\Router\Http\Segment;
 use Zend\Session\Storage\SessionArrayStorage;
 use Zend\Session\Validator\HttpUserAgent;
 use Zend\Session\Validator\RemoteAddr;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
@@ -124,6 +125,15 @@ return [
             'user/config' => ['index', 'create', 'clear'],
             'role/default' => ['index', 'create', 'update', 'delete'],
         ],
+    ],
+    'controller_plugins' => [
+        'factories' => [
+            \User\Controller\Plugin\CurrentUser::class => \User\Controller\Plugin\Factory\CurrentUserFactory::class,
+        ],
+        'aliases' => [
+            'currentUser' => \User\Controller\Plugin\CurrentUser::class,
+        ],
+        
     ],
     'controllers' => [
         'factories' => [
