@@ -1,106 +1,108 @@
 <?php 
 namespace User\Controller;
 
+use Midnet\Controller\AbstractConfigController;
 use Midnet\Model\Uuid;
 use User\Model\UserModel;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Db\Adapter\AdapterAwareTrait;
-use Zend\Mvc\Controller\AbstractActionController;
-use Exception;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Ddl\CreateTable;
+use Zend\Db\Sql\Ddl\DropTable;
+use Zend\Db\Sql\Ddl\Column\Datetime;
+use Zend\Db\Sql\Ddl\Column\Integer;
+use Zend\Db\Sql\Ddl\Column\Varchar;
+use Zend\Db\Sql\Ddl\Constraint\PrimaryKey;
 
-class UserConfigController extends AbstractActionController
+class UserConfigController extends AbstractConfigController
 {
     use AdapterAwareTrait;
     
-    public function indexAction()
+    public function __construct()
     {
-        
+        $this->setRoute('user/config');
     }
     
-    public function createAction()
+    public function clearDatabase()
     {
-        $this->createDatabase();
-        return $this->redirect()->toRoute('user/config', ['action' => 'index']);
-    }
-    
-    public function clearAction()
-    {
-        $this->clearDatabase();
-        return $this->redirect()->toRoute('user/config', ['action' => 'index']);
-    }
-    
-    private function createDatabase()
-    {
-        $sql = [];
-        /****************************************
-         * User Table
-         ****************************************/
-        $sql[0] = "
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `UUID` varchar(36) NOT NULL,
-  `USERNAME` varchar(32) NOT NULL,
-  `FNAME` varchar(100) DEFAULT NULL,
-  `LNAME` varchar(100) DEFAULT NULL,
-  `ADDR1` varchar(100) DEFAULT NULL,
-  `ADDR2` varchar(100) DEFAULT NULL,
-  `CITY` varchar(100) DEFAULT NULL,
-  `STATE` varchar(2) DEFAULT NULL,
-  `ZIP` varchar(9) DEFAULT NULL,
-  `PHONE` varchar(10) DEFAULT NULL,
-  `EMAIL` varchar(64) DEFAULT NULL,
-  `PASSWORD` varchar(64) NOT NULL,
-  `STATUS` int(11) DEFAULT NULL,
-  `DATE_CREATED` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `DATE_MODIFIED` timestamp NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Version00001';
-        ";
+        $sql = new Sql($this->adapter);
+        $ddl = [];
         
-        $sql[1] = "ALTER TABLE `users` ADD PRIMARY KEY (`UUID`);";
+        $ddl[] = new DropTable('users');
+        $ddl[] = new DropTable('roles');
+        $ddl[] = new DropTable('user_roles');
         
-        /****************************************
-         * Role Table
-         ****************************************/
-        $sql[2] = "
-DROP TABLE IF EXISTS `roles`;
-CREATE TABLE IF NOT EXISTS `roles` (
-  `UUID` varchar(36) NOT NULL,
-  `ROLENAME` varchar(255) DEFAULT NULL,
-  `STATUS` int(11) DEFAULT NULL,
-  `DATE_CREATED` timestamp NULL DEFAULT NULL,
-  `DATE_MODIFIED` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Version00001';
-        "; 
-        $sql[3] = "ALTER TABLE `roles` ADD PRIMARY KEY (`UUID`);";
-        
-        /****************************************
-         * User-Role Table
-         ****************************************/
-        $sql[5] = "
-DROP TABLE IF EXISTS `user_roles`;
-CREATE TABLE IF NOT EXISTS `user_roles` (
-  `UUID` varchar(36) NOT NULL,
-  `USER` varchar(36) NOT NULL,
-  `ROLE` varchar(36) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Version00001';
-        ";
-        $sql[6] = "ALTER TABLE `user_roles` ADD PRIMARY KEY (`UUID`);";
-        
-        
-        foreach ($sql as $key => $string) {
-            $statement = $this->adapter->createStatement($string);
-            
-            try {
-                $statement->execute();
-            } catch (Exception $e) {
-                $this->flashMessenger()->addErrorMessage("Database tables failed [$key].");
-                return $e;
-            }
+        foreach ($ddl as $obj) {
+            $this->adapter->query($sql->buildSqlString($obj), $this->adapter::QUERY_MODE_EXECUTE);
         }
+    }
+    
+    public function createDatabase()
+    {
+        $sql = new Sql($this->adapter);
         
+        /******************************
+         * USERS
+         ******************************/
+        $ddl = new CreateTable('users');
         
-        $this->flashMessenger()->addSuccessMessage('Database tables created.');
+        $ddl->addColumn(new Varchar('UUID', 36));
+        $ddl->addColumn(new Integer('STATUS', TRUE));
+        $ddl->addColumn(new Datetime('DATE_CREATED', TRUE));
+        $ddl->addColumn(new Datetime('DATE_MODIFIED', TRUE));
         
+        $ddl->addColumn(new Varchar('USERNAME', 100));
+        $ddl->addColumn(new Varchar('FNAME', 100, TRUE));
+        $ddl->addColumn(new Varchar('LNAME', 100, TRUE));
+        $ddl->addColumn(new Varchar('ADDR1', 100, TRUE));
+        $ddl->addColumn(new Varchar('ADDR2', 100, TRUE));
+        $ddl->addColumn(new Varchar('CITY', 100, TRUE));
+        $ddl->addColumn(new Varchar('STATE', 2, TRUE));
+        $ddl->addColumn(new Varchar('ZIP', 9, TRUE));
+        $ddl->addColumn(new Varchar('PHONE', 10, TRUE));
+        $ddl->addColumn(new Varchar('EMAIL', 64, TRUE));
+        $ddl->addColumn(new Varchar('PASSWORD', 64, TRUE));
+        
+        $ddl->addConstraint(new PrimaryKey('UUID'));
+        
+        $this->adapter->query($sql->buildSqlString($ddl), $this->adapter::QUERY_MODE_EXECUTE);
+        unset($ddl);
+        
+        /******************************
+         * ROLES
+         ******************************/
+        $ddl = new CreateTable('roles');
+        
+        $ddl->addColumn(new Varchar('UUID', 36));
+        $ddl->addColumn(new Integer('STATUS', TRUE));
+        $ddl->addColumn(new Datetime('DATE_CREATED', TRUE));
+        $ddl->addColumn(new Datetime('DATE_MODIFIED', TRUE));
+        
+        $ddl->addColumn(new Varchar('ROLENAME', 100, TRUE));
+        
+        $ddl->addConstraint(new PrimaryKey('UUID'));
+        
+        $this->adapter->query($sql->buildSqlString($ddl), $this->adapter::QUERY_MODE_EXECUTE);
+        unset($ddl);
+        
+        /******************************
+         * USER_ROLES
+         ******************************/
+        $ddl = new CreateTable('user_roles');
+        
+        $ddl->addColumn(new Varchar('UUID', 36));
+        
+        $ddl->addColumn(new Varchar('USER', 36));
+        $ddl->addColumn(new Varchar('ROLE', 36));
+        
+        $ddl->addConstraint(new PrimaryKey('UUID'));
+        
+        $this->adapter->query($sql->buildSqlString($ddl), $this->adapter::QUERY_MODE_EXECUTE);
+        unset($ddl);
+        
+        /******************************
+         * Create Default Users
+         ******************************/
         $user = new UserModel($this->adapter);
         $bcrypt = new Bcrypt();
         $uuid = new Uuid();
@@ -122,10 +124,5 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
         $user->create();
         
         $this->flashMessenger()->addSuccessMessage('Admin users created.');
-    }
-    
-    private function clearDatabase()
-    {
-        $this->flashMessenger()->addSuccessMessage('Database tables cleared.');
     }
 }
