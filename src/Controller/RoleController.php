@@ -67,7 +67,6 @@ class RoleController extends AbstractActionController
                 $model->update();
                 
                 $this->flashmessenger()->addSuccessMessage('Update Successful');
-                
                 return $this->redirect()->toRoute('role/default');
             }
         }
