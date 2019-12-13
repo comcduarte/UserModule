@@ -1,9 +1,11 @@
 <?php 
 namespace User\Form;
 
+use User\Model\UserModel;
 use Zend\Form\Form;
 use Zend\Form\Element\Csrf;
 use Zend\Form\Element\Password;
+use Zend\Form\Element\Select;
 use Zend\Form\Element\Submit;
 use Zend\Form\Element\Text;
 
@@ -180,15 +182,19 @@ class UserForm extends Form
         
         $this->add([
             'name' => 'STATUS',
-            'type' => Text::class,
+            'type' => Select::class,
             'attributes' => [
-                'class' => 'form-control',
                 'id' => 'STATUS',
+                'class' => 'form-control',
                 'required' => 'true',
-                'placeholder' => '',
+                'value' => UserModel::ACTIVE_STATUS,
             ],
             'options' => [
                 'label' => 'Status',
+                'value_options' => [
+                    UserModel::INACTIVE_STATUS => 'Inactive',
+                    UserModel::ACTIVE_STATUS => 'Active',
+                ],
             ],
         ]);
         

@@ -1,0 +1,5 @@
+<pre>
+Data Directory : <?php if (!$this->data_writable) { "Not "; }?>Writable
+</pre>
+<a href="<?=$this->url('user/config', ['action'=>'clear'])?>" class="btn btn-danger">Truncate Database Tables</a>
+<a href="<?=$this->url('user/config', ['action'=>'create'])?>" class="btn btn-primary">Populate Database Tables</a>

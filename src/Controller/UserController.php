@@ -9,12 +9,13 @@ use Zend\Db\Adapter\AdapterAwareTrait;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Select;
-use RuntimeException;
+use Exception;
 use User\Model\RoleModel;
 use Midnet\Model\Uuid;
 use Annotation\Model\AnnotationModel;
 use Zend\Db\Sql\Where;
 use Zend\Db\Sql\Predicate\Like;
+use User\Form\UserChangePasswordForm;
 
 class UserController extends AbstractActionController
 {
@@ -54,10 +55,14 @@ class UserController extends AbstractActionController
                 $user->STATUS = $user::ACTIVE_STATUS;
                 
                 $bcrypt = new Bcrypt();
+                
                 $user->PASSWORD = $bcrypt->create($user->PASSWORD);
                 $user->create();
                 
-                return $this->redirect()->toRoute('user/default');
+                return $this->redirect()->toRoute('user/default', ['controller' => 'user', 'action' => 'update', 'uuid' => $user->UUID]);
+            } else {
+                $this->flashmessenger()->addErrorMessage('Form is invalid.');
+                return $this->redirect()->toRoute('user/default', ['controller' => 'user', 'action' => 'create']);
             }
         }
         
@@ -87,6 +92,7 @@ class UserController extends AbstractActionController
             
             if ($form->isValid()) {
                 $user->update();
+                $this->flashmessenger()->addSuccessMessage('Update Successful');
                 return $this->redirect()->toRoute('user/default');
             }
             
@@ -180,7 +186,7 @@ class UserController extends AbstractActionController
         
         try {
             $resultSet = $statement->execute();
-        } catch (RuntimeException $e) {
+        } catch (Exception $e) {
             return $e;
         }
         
@@ -216,5 +222,47 @@ class UserController extends AbstractActionController
         $user->unassignRole(['UUID' => $uuid]);
         
         return $this->redirect()->toRoute('user/default');
+    }
+    
+    public function changepwAction()
+    {
+        $uuid = $this->params()->fromRoute('uuid', 0);
+        if (!$uuid) {
+            $this->flashmessenger()->addErrorMessage('Did not pass identifier.');
+            return $this->redirect()->toRoute('user/default');
+        }
+        
+        $model = new UserModel($this->adapter);
+        $model->read(['UUID' => $uuid]);
+        
+        $form = new UserChangePasswordForm();
+        $form->init();
+        $form->setInputFilter($model->getInputFilter());
+        
+        
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $form->setInputFilter($model->getInputFilter());
+            $form->setData($request->getPost());
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $result = $model->changePassword($data['PASSWORD']);
+                
+                if ($result) {
+                    $this->flashmessenger()->addSuccessMessage('Password Change Successful');
+                } else {
+                    $this->flashmessenger()->addErrorMessage('Unable to change password');
+                }
+                
+                return $this->redirect()->toRoute('user/default');
+            }
+            
+        }
+        
+        return ([
+            'user_change_password_form' => $form,
+            'uuid' => $uuid,
+        ]);
+        
     }
 }

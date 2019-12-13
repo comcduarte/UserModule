@@ -1,23 +1,26 @@
 <?php
 namespace User;
 
+use User\Auth\AuthAdapter;
+use User\Auth\Factory\AuthAdapterFactory;
+use User\Controller\AuthController;
+use User\Controller\RoleController;
+use User\Controller\UserConfigController;
 use User\Controller\UserController;
+use User\Controller\Factory\AuthControllerFactory;
+use User\Controller\Factory\RoleControllerFactory;
+use User\Controller\Factory\UserConfigControllerFactory;
 use User\Controller\Factory\UserControllerFactory;
+use User\Service\Factory\AuthenticationServiceFactory;
+use User\View\Helper\CurrentUser;
+use User\View\Helper\Factory\CurrentUserFactory;
+use Zend\Authentication\AuthenticationService;
+use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\Session\Storage\SessionArrayStorage;
 use Zend\Session\Validator\HttpUserAgent;
 use Zend\Session\Validator\RemoteAddr;
-use User\Controller\AuthController;
-use User\Controller\Factory\AuthControllerFactory;
-use User\Auth\AuthAdapter;
-use User\Auth\Factory\AuthAdapterFactory;
-use User\Service\Factory\AuthenticationServiceFactory;
-use Zend\Authentication\AuthenticationService;
-use Zend\Router\Http\Literal;
-use User\Controller\RoleController;
-use User\Controller\Factory\RoleControllerFactory;
-use User\Form\UserRolesForm;
-use User\Form\Factory\UserRolesFormFactory;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
@@ -80,6 +83,17 @@ return [
                             ],
                         ],
                     ],
+                    'config' => [
+                        'type' => Segment::class,
+                        'priority' => 10,
+                        'options' => [
+                            'route' => '/config[/:action]',
+                            'defaults' => [
+                                'controller' => UserConfigController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
                     'default' => [
                         'type' => Segment::class,
                         'priority' => 0,
@@ -106,21 +120,33 @@ return [
         ],
         'member' => [
             'user/logout' => ['logout'],
-            'user/default' => ['index', 'create', 'update', 'delete', 'assign', 'unassign'],
+            'user/default' => ['index', 'create', 'update', 'delete', 'assign', 'unassign', 'changepw'],
             'user' => ['index'],
+            'user/config' => ['index', 'create', 'clear'],
             'role/default' => ['index', 'create', 'update', 'delete'],
         ],
+    ],
+    'controller_plugins' => [
+        'factories' => [
+            \User\Controller\Plugin\CurrentUser::class => \User\Controller\Plugin\Factory\CurrentUserFactory::class,
+        ],
+        'aliases' => [
+            'currentUser' => \User\Controller\Plugin\CurrentUser::class,
+        ],
+        
     ],
     'controllers' => [
         'factories' => [
             UserController::class => UserControllerFactory::class,
             AuthController::class => AuthControllerFactory::class,
             RoleController::class => RoleControllerFactory::class,
+            UserConfigController::class => UserConfigControllerFactory::class,
         ],
         'aliases' => [
             'user' => Controller\UserController::class,
             'auth' => Controller\AuthController::class,
             'role' => Controller\RoleController::class,
+            'config' => UserConfigController::class,
         ],
     ],
     'navigation' => [
@@ -180,6 +206,10 @@ return [
                         'controller' => 'auth',
                         'action' => 'logout',
                     ],
+                    [
+                        'label' => 'Settings',
+                        'route' => 'user/config',
+                    ],
                 ],
             ],
         ],
@@ -193,6 +223,12 @@ return [
                         'route' => 'user/logout',
                         'controller' => 'auth',
                         'action' => 'logout',
+                    ],
+                    [
+                        'label' => 'Change Password',
+                        'route' => 'user/default',
+                        'controller' => 'user',
+                        'action' => 'changepw',
                     ],
                 ],
             ],
@@ -224,6 +260,14 @@ return [
     ],
     'session_storage' => [
         'type' => SessionArrayStorage::class
+    ],
+    'view_helpers' => [
+        'factories' => [
+            CurrentUser::class => CurrentUserFactory::class,
+        ],
+        'aliases' => [
+            'currentUser' => CurrentUser::class,
+        ],
     ],
     'view_manager' => [
         'template_path_stack' => [
